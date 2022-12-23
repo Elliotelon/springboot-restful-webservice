@@ -1,5 +1,6 @@
 package com.elliot.springboot.controller;
 
+import com.elliot.springboot.dto.UserDto;
 import com.elliot.springboot.entity.User;
 import com.elliot.springboot.service.UserService;
 import lombok.AllArgsConstructor;
@@ -19,8 +20,8 @@ public class UserController {
     // build create User REST API
     //http://localhost:8080/api/users
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user){
-        User savedUser = userService.createUser(user);
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto user){
+        UserDto savedUser = userService.createUser(user);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 

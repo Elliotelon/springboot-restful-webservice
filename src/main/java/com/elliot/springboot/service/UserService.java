@@ -1,11 +1,12 @@
 package com.elliot.springboot.service;
 
+import com.elliot.springboot.dto.UserDto;
 import com.elliot.springboot.entity.User;
 
 import java.util.List;
 
 public interface UserService {
-    User createUser(User user);
+    UserDto createUser(UserDto user);
 
     User getUserById(Long userId);
 

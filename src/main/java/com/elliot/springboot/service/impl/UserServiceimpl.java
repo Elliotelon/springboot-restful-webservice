@@ -1,5 +1,6 @@
 package com.elliot.springboot.service.impl;
 
+import com.elliot.springboot.dto.UserDto;
 import com.elliot.springboot.entity.User;
 import com.elliot.springboot.repository.UserRepository;
 import com.elliot.springboot.service.UserService;
@@ -16,8 +17,24 @@ public class UserServiceimpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserDto createUser(UserDto userDto) {
+        //Convert UserDto into User JPA Entity
+        User user = new User(
+                userDto.getId(),
+                userDto.getFirstName(),
+                userDto.getLastName(),
+                userDto.getEmail()
+        );
+        User savedUser = userRepository.save(user);
+
+        //Convert User JPA entity to UserDto
+        UserDto savedUserDto = new UserDto(
+                savedUser.getId(),
+                savedUser.getFirstName(),
+                savedUser.getLastName(),
+                savedUser.getEmail()
+        );
+        return savedUserDto;
     }
 
     @Override
