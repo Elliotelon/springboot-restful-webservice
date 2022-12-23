@@ -2,6 +2,7 @@ package com.elliot.springboot.service.impl;
 
 import com.elliot.springboot.dto.UserDto;
 import com.elliot.springboot.entity.User;
+import com.elliot.springboot.mapper.UserMapper;
 import com.elliot.springboot.repository.UserRepository;
 import com.elliot.springboot.service.UserService;
 import lombok.AllArgsConstructor;
@@ -19,21 +20,12 @@ public class UserServiceimpl implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
         //Convert UserDto into User JPA Entity
-        User user = new User(
-                userDto.getId(),
-                userDto.getFirstName(),
-                userDto.getLastName(),
-                userDto.getEmail()
-        );
+        User user = UserMapper.mapToUser(userDto);
+
         User savedUser = userRepository.save(user);
 
         //Convert User JPA entity to UserDto
-        UserDto savedUserDto = new UserDto(
-                savedUser.getId(),
-                savedUser.getFirstName(),
-                savedUser.getLastName(),
-                savedUser.getEmail()
-        );
+        UserDto savedUserDto = UserMapper.mapToUserDto(savedUser);
         return savedUserDto;
     }
 
