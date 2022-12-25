@@ -2,6 +2,7 @@ package com.elliot.springboot.service.impl;
 
 import com.elliot.springboot.dto.UserDto;
 import com.elliot.springboot.entity.User;
+import com.elliot.springboot.exception.ResourceNotFoundException;
 import com.elliot.springboot.mapper.UserMapper;
 import com.elliot.springboot.repository.UserRepository;
 import com.elliot.springboot.service.UserService;
@@ -37,8 +38,10 @@ public class UserServiceimpl implements UserService {
 
     @Override
     public UserDto getUserById(Long userId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        User user = optionalUser.get();
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", userId)
+        );
+//        User user = optionalUser.get();
 //        return UserMapper.mapToUserDto(user);
         return modelMapper.map(user, UserDto.class);
     }
@@ -52,7 +55,9 @@ public class UserServiceimpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto user) {
-        User existingUser = userRepository.findById(user.getId()).get();
+        User existingUser = userRepository.findById(user.getId()).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", user.getId())
+        );
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName((user.getLastName()));
         existingUser.setEmail((user.getEmail()));
@@ -63,6 +68,9 @@ public class UserServiceimpl implements UserService {
 
     @Override
     public void deleteUser(Long userId) {
+        User existingUser = userRepository.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", userId)
+        );
         userRepository.deleteById(userId);
     }
 }
