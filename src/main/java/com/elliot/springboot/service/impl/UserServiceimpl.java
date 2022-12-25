@@ -2,6 +2,7 @@ package com.elliot.springboot.service.impl;
 
 import com.elliot.springboot.dto.UserDto;
 import com.elliot.springboot.entity.User;
+import com.elliot.springboot.exception.EmailAlreadyExistsException;
 import com.elliot.springboot.exception.ResourceNotFoundException;
 import com.elliot.springboot.mapper.UserMapper;
 import com.elliot.springboot.repository.UserRepository;
@@ -26,6 +27,13 @@ public class UserServiceimpl implements UserService {
     public UserDto createUser(UserDto userDto) {
         //Convert UserDto into User JPA Entity
         //User user = UserMapper.mapToUser(userDto);
+
+        Optional<User> optionalUser = userRepository.findByEmail(userDto.getEmail());
+
+        if(optionalUser.isPresent()){
+            throw new EmailAlreadyExistsException("Email Already Exists for User");
+        }
+
         User user = modelMapper.map(userDto, User.class);
 
         User savedUser = userRepository.save(user);
